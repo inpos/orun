@@ -25,9 +25,9 @@ def encode(o):
         return json.dumps(o, default=_encoder)
 
 # trick json serialize javascript block
-class JsBlock(int):
+class JsBlock(str):
     def __new__(cls, *args, **kwargs):
-        obj = super(JsBlock, cls).__new__(cls, 0)
+        obj = super(JsBlock, cls).__new__(cls, 'function () { %s }' % args[0])
         obj.code = args[0]
         return obj
         

@@ -1,20 +1,22 @@
 
 import json
 from . import js
+import re
 
 __all__ = ['create', 'createByAlias', 'Component']
 
 def js_ajax(fn):
     i = id(fn)
     js.live_methods[i] = fn
-    return js.client.Ext.Ajax.request({'url': js.AJAX_URL, 'method': 'GET', 'params': {'fn': i, 'id': js.client.this.id}, 'success': js.function('eval(arguments[0].responseText);')})
+    return "%s({'url': '%s', 'method': 'GET', 'params': {'fn': %d, 'id_': %s}, 'success': %s })"\
+        % (js.client.Ext.Ajax.request, js.AJAX_URL, i, js.client.this.id, js.function('eval(arguments[0].responseText);'))
 
 js.js_ajax = js_ajax
 
 def _create(meth, name, args):
     #args['pyLive'] = True : TODO
     obj = Component(**args)
-    js.write('var %s = Ext.create("%s", %s);' % (obj._id, name, str(obj)))
+    js.write('var %s = Ext.create(\'%s\', %s);' % (obj._id, name, str(obj)))
     return obj
 
 def create(name, args={}):
@@ -24,10 +26,10 @@ def createByAlias(alias, args={}):
     return _create('createByAlias', alias, args)
 
 def get(id):
-    return js.JsNode('Ext.get("%s")' % id)
+    return js.JsNode('Ext.get(\'%s\')' % id)
 
 def getCmp(id):
-    return js.JsNode('Ext.getCmp("%s")' % id)
+    return js.JsNode('Ext.getCmp(\'%s\')' % id)
 
 class Component(js.JsObject):
     def __init__(self, *args, **kwargs):
@@ -53,4 +55,6 @@ class Component(js.JsObject):
         pass
     
     def __str__(self):
-        return json.dumps(self._js, default=js._encoder)
+        s = json.dumps(self._js, default=js._encoder)
+        
+        return re.sub(r'("handler":\s+)("([^"]+)")', r'\1\3', s)

@@ -1,16 +1,15 @@
-
 from orun.extjs import *
 from orun.extjs import cp
 
-def ok_click(id, *args, **kwargs):
-    cli << Ext.getCmp(id).setText('Clicked')
-    cli << js.client.alert('Server side message')
+def ok_click(id_, *args, **kwargs):
+    js.cli << Ext.getCmp(id_).setText('Clicked')
+    js.cli << js.client.alert('Server side message')
 
-def button_click(id, *args, **kwargs):
+def button_click(id_, *args, **kwargs):
     js.write("""
     Ext.getCmp("%s").setText('Clicked');
     alert('Server side callback message');
-    """ % id)
+    """ % id_)
 
 class MyApplication(cp.ExtApplication):
     def main(self, *args, **kwargs):
@@ -18,7 +17,7 @@ class MyApplication(cp.ExtApplication):
             'items': [{'xtype': 'button', 'text': 'Click Here', 'handler': button_click}],
             'buttons': [
                 {'text': 'OK', 'handler': ok_click},
-                {'text': 'Close', 'handler': js.function('this.up("window").close();')}]})
+                {'text': 'Close', 'handler': js.function('this.up(\'window\').close()')}]})
         wnd.show()
         wnd.setHeight(200)
 
