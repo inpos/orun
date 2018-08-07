@@ -56,5 +56,4 @@ class Component(js.JsObject):
     
     def __str__(self):
         s = json.dumps(self._js, default=js._encoder)
-        
         return re.sub(r'("handler":\s+)("([^"]+)")', r'\1\3', s)
