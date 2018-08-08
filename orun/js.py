@@ -8,38 +8,84 @@ js_ajax = None
 
 live_methods = {}
 
-class FuncWithParams(object):
+class FuncWithParams:
     def __init__(self, func, params):
         self.func = func
         self.params = params
 
-def _encoder(o):
-    if isinstance(o, JsObject):
-        return o._js
-    elif isinstance(o, JsNode):
-        return block(str(o))
-    elif isinstance(o, types.FunctionType) and js_ajax:
-        return str(function(js_ajax(o)))
-    elif isinstance(o, FuncWithParams):
-        return str(function(js_ajax(o.func, o.params)))
+def list2extjs(l):
+    s = '[ %s ]'
+    ss = []
+    for v in l:
+        if isinstance(v, int):
+            ss.append('%d' % v)
+        elif isinstance(v, str):
+            ss.append('\'%s\'' % v)
+        elif isinstance(v, types.FunctionType):
+            ss.append(str(function(js_ajax(v))))
+        elif isinstance(v, FuncWithParams):
+            ss.append(str(function(js_ajax(v.func, v.params))))
+        elif isinstance(v, JsFunction):
+            ss.append(str(v))
+        elif isinstance(v, JsNode):
+            ss.append(str(v))
+        elif isinstance(v, dict):
+            ss.append(dict2extjs(v))
+        elif isinstance(v, (list, tuple)):
+            ss.append(list2extjs(v))
+    return s % ', '.join(ss)
+
+def dict2extjs(d):
+    s = '{ %s }'
+    ss = []
+    for k, v in d.items():
+        if isinstance(v, int):
+            ss.append('%s: %d' % (k,v))
+        elif isinstance(v, str):
+            ss.append('%s: \'%s\'' % (k, v))
+        elif isinstance(v, types.FunctionType):
+            ss.append('%s: %s' % (k, str(function(js_ajax(v)))))
+        elif isinstance(v, FuncWithParams):
+            ss.append('%s: %s' % (k, str(function(js_ajax(v.func, v.params)))))
+        elif isinstance(v, JsFunction):
+            ss.append('%s: %s' % (k, str(v)))
+        elif isinstance(v, JsNode):
+            ss.append('%s: %s' % (k, str(v)))
+        elif isinstance(v, dict):
+            ss.append('%s: %s' % (k, dict2extjs(v)))
+        elif isinstance(v, (list, tuple)):
+            ss.append('%s: %s' % (k, list2extjs(v)))
+    return s % ', '.join(ss)
+
     
 def encode(o):
     if isinstance(o, JsNode):
         return str(o)
     elif isinstance(o, (list, tuple)):
-        return '[%s]' % ','.join([encode(i) for i in o])
+        return list2extjs(o)
+    elif isinstance(o, int):
+        return '%d' % o
+    elif isinstance(o, str):
+        return '\'%s\'' % o
+    elif isinstance(o, types.FunctionType):
+        return str(function(js_ajax(o)))
+    elif isinstance(o, FuncWithParams):
+        return str(function(js_ajax(o.func, o.params)))
+    elif isinstance(o, JsFunction):
+        return str(o)
+    elif isinstance(o, JsNode):
+        return str(o)
+    elif isinstance(o, dict):
+        return dict2extjs(o)
     else:
-        return json.dumps(o, default=_encoder)
+        return o
 
-# trick json serialize javascript block
-class JsBlock(str):
-    def __new__(cls, *args, **kwargs):
-        obj = super(JsBlock, cls).__new__(cls, '%s' % args[0])
-        obj.code = args[0]
-        return obj
+class JsBlock:
+    def __init__(self, *args, **kwargs):
+        self.code = args[0]
         
-    def __str__(cls):
-        return cls.code
+    def __str__(self):
+        return self.code
     
 class JsFunction(JsBlock):
     def __str__(cls):

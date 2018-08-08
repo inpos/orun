@@ -1,14 +1,13 @@
 
-import json
 from . import js
-import re
+
 
 __all__ = ['create', 'createByAlias', 'Component']
 
 def js_ajax(fn, arg_dict = {}):
     i = id(fn)
     js.live_methods[i] = fn
-    func_args = ', '.join(['\'{k}\': {v}'.format( k = k,v = '\'%s\'' % v if type(v) is str else v  ) for k,v in arg_dict.items()])
+    func_args = ', '.join(['\'{k}\': {v}'.format( k = k,v = js.encode(v) ) for k,v in arg_dict.items()])
     if func_args != '': func_args = ', ' + func_args
     return "%s({'url': '%s', 'method': 'GET', 'params': { 'fn': %d, 'id_': %s %s}, 'success': %s })"\
         % (js.client.Ext.Ajax.request, js.AJAX_URL, i, js.client.this.id, func_args, js.function('eval(arguments[0].responseText);'))
@@ -59,5 +58,4 @@ class Component(js.JsObject):
         pass
     
     def __str__(self):
-        s = json.dumps(self._js, default=js._encoder, indent=4)
-        return re.sub(r'("(handler|renderTo)":\s+)("([^"]+)")', r'\1\4', s)
+        return js.dict2extjs(self._js)
