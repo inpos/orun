@@ -32,6 +32,8 @@ def get(id):
 
 def getCmp(id):
     return js.JsNode('Ext.getCmp(\'%s\')' % id)
+def getBody():
+    return js.JsNode('Ext.getBody()')
 
 class Component(js.JsObject):
     def __init__(self, *args, **kwargs):
