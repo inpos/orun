@@ -16,10 +16,12 @@ class MyApplication(cp.ExtApplication):
         wnd = Ext.create('widget.window', {'title': 'My Window', 'width': 300, 'height': 250,
             'items': [{'xtype': 'button', 'text': 'Click Here', 'handler': button_click}],
             'buttons': [
-                {'text': 'OK', 'handler': ok_click},
+                {'text': 'OK', 'handler': js.FuncWithParams(ok_click, {'arg1': 1, 'arg2': 'val2'})},
                 {'text': 'Close', 'handler': js.function('this.up(\'window\').close()')}]})
         wnd.show()
         wnd.setHeight(200)
+
+cp.THEME = 'classic'
 
 app = MyApplication('Orun (ExtJS Application)')
 app.run()
