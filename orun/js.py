@@ -14,48 +14,10 @@ class FuncWithParams:
         self.params = params
 
 def list2extjs(l):
-    s = '[ %s ]'
-    ss = []
-    for v in l:
-        if isinstance(v, int):
-            ss.append('%d' % v)
-        elif isinstance(v, str):
-            ss.append('\'%s\'' % v)
-        elif isinstance(v, types.FunctionType):
-            ss.append(str(function(js_ajax(v))))
-        elif isinstance(v, FuncWithParams):
-            ss.append(str(function(js_ajax(v.func, v.params))))
-        elif isinstance(v, JsFunction):
-            ss.append(str(v))
-        elif isinstance(v, JsNode):
-            ss.append(str(v))
-        elif isinstance(v, dict):
-            ss.append(dict2extjs(v))
-        elif isinstance(v, (list, tuple)):
-            ss.append(list2extjs(v))
-    return s % ', '.join(ss)
+    return '[ %s ]' % ', '.join([encode(v) for v in l])
 
 def dict2extjs(d):
-    s = '{ %s }'
-    ss = []
-    for k, v in d.items():
-        if isinstance(v, int):
-            ss.append('%s: %d' % (k,v))
-        elif isinstance(v, str):
-            ss.append('%s: \'%s\'' % (k, v))
-        elif isinstance(v, types.FunctionType):
-            ss.append('%s: %s' % (k, str(function(js_ajax(v)))))
-        elif isinstance(v, FuncWithParams):
-            ss.append('%s: %s' % (k, str(function(js_ajax(v.func, v.params)))))
-        elif isinstance(v, JsFunction):
-            ss.append('%s: %s' % (k, str(v)))
-        elif isinstance(v, JsNode):
-            ss.append('%s: %s' % (k, str(v)))
-        elif isinstance(v, dict):
-            ss.append('%s: %s' % (k, dict2extjs(v)))
-        elif isinstance(v, (list, tuple)):
-            ss.append('%s: %s' % (k, list2extjs(v)))
-    return s % ', '.join(ss)
+    return '{ %s }' % ', '.join('%s: %s' % (k, encode(v)) for k,v in d.items())
 
     
 def encode(o):
@@ -72,8 +34,6 @@ def encode(o):
     elif isinstance(o, FuncWithParams):
         return str(function(js_ajax(o.func, o.params)))
     elif isinstance(o, JsFunction):
-        return str(o)
-    elif isinstance(o, JsNode):
         return str(o)
     elif isinstance(o, dict):
         return dict2extjs(o)

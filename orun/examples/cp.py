@@ -20,7 +20,6 @@ class MyApplication(cp.ExtApplication):
                 {'text': 'Close', 'handler': js.function('this.up(\'window\').close()')}]})
         wnd.show()
         wnd.setHeight(200)
-        print(repr(js.live_methods))
 
 cp.THEME = 'classic'
 
