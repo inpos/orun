@@ -19,9 +19,9 @@ def _encoder(o):
     elif isinstance(o, JsNode):
         return block(str(o))
     elif isinstance(o, types.FunctionType) and js_ajax:
-        return function(js_ajax(o))
+        return str(function(js_ajax(o)))
     elif isinstance(o, FuncWithParams):
-        return function(js_ajax(o.func, o.params))
+        return str(function(js_ajax(o.func, o.params)))
     
 def encode(o):
     if isinstance(o, JsNode):
@@ -34,7 +34,7 @@ def encode(o):
 # trick json serialize javascript block
 class JsBlock(str):
     def __new__(cls, *args, **kwargs):
-        obj = super(JsBlock, cls).__new__(cls, 'function () { %s }' % args[0])
+        obj = super(JsBlock, cls).__new__(cls, '%s' % args[0])
         obj.code = args[0]
         return obj
         

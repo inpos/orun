@@ -17,7 +17,7 @@ class MyApplication(cp.ExtApplication):
             'items': [{'xtype': 'button', 'text': 'Click Here', 'handler': button_click}],
             'buttons': [
                 {'text': 'OK', 'handler': js.FuncWithParams(ok_click, {'arg1': 1, 'arg2': 'val2'})},
-                {'text': 'Close', 'handler': js.function('this.up(\'window\').close()')}]})
+                {'text': 'Close', 'handler': str(js.function('this.up(\'window\').close()'))}]})
         wnd.show()
         wnd.setHeight(200)
 

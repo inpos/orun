@@ -59,5 +59,5 @@ class Component(js.JsObject):
         pass
     
     def __str__(self):
-        s = json.dumps(self._js, default=js._encoder)
-        return re.sub(r'(":\s+)("(function[^"]+)")', r'\1\3', s)
+        s = json.dumps(self._js, default=js._encoder, indent=4)
+        return re.sub(r'("(handler|renderTo)":\s+)("([^"]+)")', r'\1\4', s)
