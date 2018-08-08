@@ -8,6 +8,11 @@ js_ajax = None
 
 live_methods = {}
 
+class FuncWithParams(object):
+    def __init__(self, func, params):
+        self.func = func
+        self.params = params
+
 def _encoder(o):
     if isinstance(o, JsObject):
         return o._js
@@ -15,6 +20,8 @@ def _encoder(o):
         return block(str(o))
     elif isinstance(o, types.FunctionType) and js_ajax:
         return function(js_ajax(o))
+    elif isinstance(o, FuncWithParams):
+        return function(js_ajax(o.func, o.params))
     
 def encode(o):
     if isinstance(o, JsNode):

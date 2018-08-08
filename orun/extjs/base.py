@@ -5,11 +5,13 @@ import re
 
 __all__ = ['create', 'createByAlias', 'Component']
 
-def js_ajax(fn):
+def js_ajax(fn, arg_dict = {}):
     i = id(fn)
     js.live_methods[i] = fn
-    return "%s({'url': '%s', 'method': 'GET', 'params': {'fn': %d, 'id_': %s}, 'success': %s })"\
-        % (js.client.Ext.Ajax.request, js.AJAX_URL, i, js.client.this.id, js.function('eval(arguments[0].responseText);'))
+    func_args = ', '.join(['\'{k}\': {v}'.format( k = k,v = '\'%s\'' % v if type(v) is str else v  ) for k,v in arg_dict.items()])
+    if func_args != '': func_args = ', ' + func_args
+    return "%s({'url': '%s', 'method': 'GET', 'params': { 'fn': %d, 'id_': %s %s}, 'success': %s })"\
+        % (js.client.Ext.Ajax.request, js.AJAX_URL, i, js.client.this.id, func_args, js.function('eval(arguments[0].responseText);'))
 
 js.js_ajax = js_ajax
 
