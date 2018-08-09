@@ -30,13 +30,17 @@ def encode(o):
         return str(o)
     elif isinstance(o, (list, tuple)):
         return list2extjs(o)
+    elif isinstance(o, bool):
+        return str(o).lower()
     elif isinstance(o, int):
-        return '%d' % o
+        return str(o)
+    elif isinstance(o, float):
+        return str(o)
     elif isinstance(o, str):
         return '\'%s\'' % o
     elif isinstance(o, types.FunctionType):
         return str(function(js_ajax(o)))
-    elif isinstance(o, type(stub_class.stub_method)):
+    elif isinstance(o, types.MethodType):
         return str(function(js_ajax(o)))
     elif isinstance(o, FuncWithParams):
         return str(function(js_ajax(o.func, o.params)))
