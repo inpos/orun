@@ -1,5 +1,4 @@
-from orun.extjs import *
-from orun.extjs import cp
+from orun.extjs import js, Ext, cp
 
 def ok_click(id_, *args, **kwargs):
     js.cli << Ext.getCmp(id_).setText('Clicked')

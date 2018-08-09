@@ -48,8 +48,8 @@ class JsBlock:
         return self.code
     
 class JsFunction(JsBlock):
-    def __str__(cls):
-        return 'function () { %s }' % cls.code
+    def __str__(self):
+        return 'function () { %s }' % self.code
 
 block = JsBlock
 func = function = JsFunction
@@ -69,8 +69,9 @@ class JsManager(object):
         self.output.append(data)
         
     def __str__(self):
-        s = '\n'.join(output)
         output = self.output[:]
+        s = '\n'.join(output)
+        
         return s
     
 class JsNode(object):
@@ -215,4 +216,4 @@ if __name__ == '__main__':
     client << client.x
     
     # test block
-    print(json.dumps({'click': call}, default=_encoder))
+    print(encode({'click': 'call'}))
