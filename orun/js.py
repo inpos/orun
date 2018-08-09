@@ -19,10 +19,10 @@ class FuncWithParams:
         self.params = params
 
 def list2extjs(l):
-    return '[ %s ]' % ', '.join([encode(v) for v in l])
+    return '[\n%s\n]' % ',\n'.join([encode(v) for v in l])
 
 def dict2extjs(d):
-    return '{ %s }' % ', '.join('%s: %s' % (k, encode(v)) for k,v in d.items())
+    return '{\n%s\n}' % ',\n'.join('%s: %s' % (k, encode(v)) for k,v in d.items())
 
     
 def encode(o):
