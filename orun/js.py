@@ -44,6 +44,8 @@ def encode(o):
         return str(o)
     elif isinstance(o, dict):
         return dict2extjs(o)
+    elif isinstance(o, JsObject):
+        return o._id
     else:
         return o
 
