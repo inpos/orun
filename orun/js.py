@@ -8,6 +8,11 @@ js_ajax = None
 
 live_methods = {}
 
+class STUB:
+    def stub_method(self):
+        pass
+stub_class = STUB()
+
 class FuncWithParams:
     def __init__(self, func, params):
         self.func = func
@@ -30,6 +35,8 @@ def encode(o):
     elif isinstance(o, str):
         return '\'%s\'' % o
     elif isinstance(o, types.FunctionType):
+        return str(function(js_ajax(o)))
+    elif isinstance(o, type(stub_class.stub_method)):
         return str(function(js_ajax(o)))
     elif isinstance(o, FuncWithParams):
         return str(function(js_ajax(o.func, o.params)))
