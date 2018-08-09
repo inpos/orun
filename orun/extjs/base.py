@@ -27,9 +27,13 @@ def createByAlias(alias, args={}):
     return _create('createByAlias', alias, args)
 
 def get(id):
+    if isinstance(id, js.JsObject):
+        id = id._id
     return js.JsNode('Ext.get(\'%s\')' % id)
 
 def getCmp(id):
+    if isinstance(id, js.JsObject):
+        id = id._id
     return js.JsNode('Ext.getCmp(\'%s\')' % id)
 def getBody():
     return js.JsNode('Ext.getBody()')
