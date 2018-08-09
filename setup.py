@@ -3,7 +3,7 @@ import os
 
 def package_files(directory):
     paths = []
-    for (path, directories, filenames) in os.walk(directory):
+    for (path, _, filenames) in os.walk(directory):
         for filename in filenames:
             paths.append(os.path.join('..', path, filename))
     return paths
@@ -13,8 +13,8 @@ extra_files.extend(package_files('extjs/static'))
 
 setuptools.setup(
     name='Orun',
-    version='0.1.0',
-    author='Alexandre L. Dias',
+    version='0.2.0',
+    author='Alexandre L. Dias, Roman Borodin (inpos@yandex.ru)',
     author_email='alexandre@katrid.com',
     packages=setuptools.find_packages(),
     package_data={'': extra_files},
