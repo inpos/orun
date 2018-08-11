@@ -1,4 +1,3 @@
-
 import types
 import json
 
@@ -14,9 +13,10 @@ class STUB:
 stub_class = STUB()
 
 class FuncWithParams:
-    def __init__(self, func, params):
+    def __init__(self, func, args = [], params = {}):
         self.func = func
         self.params = params
+        self.args = args
 
 def list2extjs(l):
     return '[ %s ]' % ', '.join([encode(v) for v in l])
@@ -43,7 +43,7 @@ def encode(o):
     elif isinstance(o, types.MethodType):
         return str(function(js_ajax(o)))
     elif isinstance(o, FuncWithParams):
-        return str(function(js_ajax(o.func, o.params)))
+        return str(function(js_ajax(o.func, o.params), o.args))
     elif isinstance(o, JsFunction):
         return str(o)
     elif isinstance(o, dict):
@@ -56,13 +56,14 @@ def encode(o):
 class JsBlock:
     def __init__(self, *args, **kwargs):
         self.code = args[0]
+        self.args = args[1] if len(args) > 1 else []
         
     def __str__(self):
         return self.code
     
 class JsFunction(JsBlock):
     def __str__(self):
-        return 'function () { %s }' % self.code
+        return 'function (%s) { %s }' % (','.join(self.args), self.code)
 
 block = JsBlock
 func = function = JsFunction
