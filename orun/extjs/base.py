@@ -33,6 +33,8 @@ def getCmp(id):
 def getBody():
     return js.JsNode('Ext.getBody()')
 
+tip = js.JsNode('Ext.tip')
+
 class Component(js.JsObject):
     def __init__(self, *args, **kwargs):
         super(Component, self).__init__(*args, **kwargs)
