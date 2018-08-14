@@ -22,6 +22,9 @@ def _create(meth, name, args):
 def create(name, args={}):
     return _create('create', name, args)
 
+def define(name, args={}):
+    js.write('Ext.define(\'%s\', %s);' % (name, js.encode(args)))
+
 def createByAlias(alias, args={}):
     return _create('createByAlias', alias, args)
 
