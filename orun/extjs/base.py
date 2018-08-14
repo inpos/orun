@@ -36,6 +36,9 @@ def getCmp(id):
 def getBody():
     return js.JsNode('Ext.getBody()')
 
+def re(pattern):
+    return js.RE(pattern)
+
 tip = js.JsNode('Ext.tip')
 
 class Component(js.JsObject):

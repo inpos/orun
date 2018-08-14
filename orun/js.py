@@ -7,10 +7,9 @@ js_ajax = None
 
 live_methods = {}
 
-class STUB:
-    def stub_method(self):
-        pass
-stub_class = STUB()
+class RE:
+    def __init__(self, re):
+        self.re = re
 
 class FuncWithParams:
     def __init__(self, func, args = [], params = {}):
@@ -28,6 +27,8 @@ def dict2extjs(d):
 def encode(o):
     if isinstance(o, JsNode):
         return str(o)
+    if isinstance(o, RE):
+        return o.re
     elif isinstance(o, (list, tuple)):
         return list2extjs(o)
     elif isinstance(o, bool):
