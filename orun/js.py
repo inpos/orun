@@ -11,6 +11,9 @@ class RE:
     def __init__(self, re):
         self.re = re
 
+def re(pattern):
+    return RE(pattern)
+
 class FuncWithParams:
     def __init__(self, func, args = [], params = {}):
         self.func = func
