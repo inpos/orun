@@ -3,13 +3,22 @@ import cherrypy
 from orun import js
 from orun import app
 
+config = {
+    'global' : {
+        'server.max_request_body_size' : 0,
+        'server.socket_timeout' : 60
+        }
+    }
+
 class Application(app.Application):
     def index(self):
         return 'Orun application server is running'
     index.exposed = True
     
-    def run(self, port=8080, config=None):
+    def run(self, port=8080, user_config=None):
         super(Application, self).run()
+        if user_config:
+            config.update(user_config)
         cherrypy.quickstart(self, '/', config)
 
 class JsManager(object):
