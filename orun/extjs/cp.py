@@ -7,16 +7,23 @@ import cherrypy
 THEME = 'gray'
 
 @cherrypy.expose
-class ExtJS(object):
+class ExtJS:
     _cp_config = {
             'tools.staticdir.on': True,
-            'tools.staticdir.dir': os.path.join(os.path.dirname(__file__), 'static/','ext-4.2.1'),
+            'tools.staticdir.dir': os.path.join(os.path.dirname(__file__), 'static','ext-4.2.1'),
+        }
+@cherrypy.expose
+class ExtJSUploadWidget:
+    _cp_config = {
+            'tools.staticdir.on': True,
+            'tools.staticdir.dir': os.path.join(os.path.dirname(__file__), 'static','extjs-upload-widget', 'lib', 'upload'),
         }
 
 class ExtApplication(cp.Application):
     def __init__(self, title=''):
         super(ExtApplication, self).__init__(title)
         self.ext_421 = ExtJS()
+        self.extjs_upload_widget = ExtJSUploadWidget()
     
     def index(self, *args, **kwargs):
         f = open(os.path.join(os.path.dirname(__file__), 'app.html')).read()
