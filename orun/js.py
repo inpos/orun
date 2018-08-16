@@ -34,17 +34,17 @@ def js_procedure(func_id, ajax_args=''):
 
 def js_function(func_id, ajax_args=''):
     return '''
-    var ajax_result;
-    Ext.Ajax.request(
+    var response = Ext.Ajax.request(
         {
             url: '%s',
             method: 'GET',
+            async: false,
             params: {
                         fn: %d%s
             },
-            success: function () { ajax_result = JSON.parse(arguments[0].responseText); }
         }
     );
+    var ajax_result = JSON.parse(response.responseText);
     return ajax_result.data;
 ''' % (
         AJAX_FUNC_URL,
