@@ -1,4 +1,3 @@
-import types
 import json
 
 AJAX_URL = '/ajax_callback'
@@ -48,14 +47,14 @@ def js_function(func_id, ajax_args=''):
     );
     return ajax_result.data;
 ''' % (
-        const.AJAX_URL_PROC,
+        AJAX_FUNC_URL,
         func_id,
         ajax_args
     )
 
 def js_ajax(fn, arg_dict = {}, f_type=js_procedure):
     i = id(fn)
-    gvars.functions[i] = fn
+    live_methods[i] = fn
     func_args = ',\n'.join(['\'{k}\': {v}'.format( k = k,v = encode(v) ) for k,v in arg_dict.items()])
     if func_args != '': 
         func_args = ',\n' + func_args
