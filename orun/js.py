@@ -2,6 +2,7 @@ import types
 import json
 
 AJAX_URL = '/ajax_callback'
+AJAX_FUNC_URL = '/ajax_func_callback'
 js_manager = None
 js_ajax = None
 
@@ -14,11 +15,52 @@ class RE:
 def re(pattern):
     return RE(pattern)
 
-class FuncWithParams:
-    def __init__(self, func, args = [], params = {}):
-        self.func = func
-        self.params = params
-        self.args = args
+def js_procedure(func_id, ajax_args=''):
+    return '''
+    Ext.Ajax.request(
+        {
+            url: %s,
+            method: 'GET',
+            params: {
+                        fn: %d%s
+                },
+            success: function () { eval(arguments[0].responseText); }
+        }
+    );
+''' % (
+        AJAX_URL,
+        func_id,
+        ajax_args
+    )
+
+def js_function(func_id, ajax_args=''):
+    return '''
+    var ajax_result;
+    Ext.Ajax.request(
+        {
+            url: %s,
+            method: 'GET',
+            params: {
+                        fn: %d%s
+            },
+            success: function () { ajax_result = JSON.parse(arguments[0].responseText); }
+        }
+    );
+    return ajax_result.data;
+''' % (
+        const.AJAX_URL_PROC,
+        func_id,
+        ajax_args
+    )
+
+def js_ajax(fn, arg_dict = {}, f_type=js_procedure):
+    i = id(fn)
+    gvars.functions[i] = fn
+    func_args = ',\n'.join(['\'{k}\': {v}'.format( k = k,v = encode(v) ) for k,v in arg_dict.items()])
+    if func_args != '': 
+        func_args = ',\n' + func_args
+    print(func_args)
+    return f_type(i, ajax_args=func_args)
 
 def list2extjs(l):
     return '[ %s ]' % ', '.join([encode(v) for v in l])
@@ -26,6 +68,31 @@ def list2extjs(l):
 def dict2extjs(d):
     return '{ %s }' % ', '.join('%s: %s' % (k, encode(v)) for k,v in d.items())
 
+class JsProcedure:
+    def __init__(self, *a, **kw):
+        self.func = a[0]
+        self.params = kw.get('params', {})
+        self.args = kw.get('args', [])
+    @property
+    def js(self):
+        return 'function (%s) { %s }' % (', '.join(self.args), js_ajax(self, arg_dict=self.params, f_type=js_procedure))
+
+class JsFunction(JsProcedure):
+    @property
+    def js(self):
+        return 'function (%s) { %s }' % (', '.join(self.args), js_ajax(self, arg_dict=self.params, f_type=js_function))
+
+class JsStrFunction:
+    def __init__(self, *a, **kw):
+        self.code = a[0]
+        self.args = kw.get('args', [])
+    @property
+    def js(self):
+        return 'function (%s) { %s }' % (', '.join(self.args), self.code)
+
+function = JsFunction
+procedure = JsProcedure
+strfunction = JsStrFunction
     
 def encode(o):
     if isinstance(o, JsNode):
@@ -42,14 +109,8 @@ def encode(o):
         return str(o)
     elif isinstance(o, str):
         return '\'%s\'' % o
-    elif isinstance(o, types.FunctionType):
-        return str(function(js_ajax(o)))
-    elif isinstance(o, types.MethodType):
-        return str(function(js_ajax(o)))
-    elif isinstance(o, FuncWithParams):
-        return str(function(js_ajax(o.func, o.params), o.args))
-    elif isinstance(o, JsFunction):
-        return str(o)
+    elif isinstance(o, (function, procedure, strfunction)):
+        return o.js
     elif isinstance(o, dict):
         return dict2extjs(o)
     elif isinstance(o, JsObject):
@@ -65,13 +126,6 @@ class JsBlock:
     def __str__(self):
         return self.code
     
-class JsFunction(JsBlock):
-    def __str__(self):
-        return 'function (%s) { %s }' % (','.join(self.args), self.code)
-
-block = JsBlock
-func = function = JsFunction
-
 def write(code):
     if js_manager:
         js_manager.write(str(code))

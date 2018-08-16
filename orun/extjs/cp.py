@@ -18,19 +18,34 @@ class ExtApplication(cp.Application):
         super(ExtApplication, self).__init__(title)
         self.ext_421 = ExtJS()
     
+    @cherrypy.expose
     def index(self, *args, **kwargs):
         f = open(os.path.join(os.path.dirname(__file__), 'app.html')).read()
         self.main()
         return f % (self.title, THEME, THEME, str(js.js_manager))
-    index.exposed = True
     
+    @cherrypy.expose
     def ajax_callback(self, *args, **kwargs):
         fn = kwargs.pop('fn')
         if fn:
             fn = js.live_methods[int(fn)]
             fn(*args, **kwargs)
         return str(js.js_manager)
-    ajax_callback.exposed = True
+    
+    @cherrypy.expose
+    @cp.cherrypy.tools.json_out()
+    def ajax_func_callback(self, *args, **kwargs):
+        fn = kwargs.pop('fn')
+        if fn:
+            fn = js.live_methods[int(fn)]
+            res = fn(*args, **kwargs)
+            return {
+                'data': res
+                }
+        else:
+            return {
+                'data': None
+                }
     
 if __name__ == '__main__':
     app = ExtApplication('Orun (ExtJS Application)')
