@@ -52,15 +52,6 @@ def js_function(func_id, ajax_args=''):
         ajax_args
     )
 
-def js_ajax(fn, arg_dict = {}, f_type=js_procedure):
-    i = id(fn)
-    live_methods[i] = fn
-    func_args = ',\n'.join(['\'{k}\': {v}'.format( k = k,v = encode(v) ) for k,v in arg_dict.items()])
-    if func_args != '': 
-        func_args = ',\n' + func_args
-    print(func_args)
-    return f_type(i, ajax_args=func_args)
-
 def list2extjs(l):
     return '[ %s ]' % ', '.join([encode(v) for v in l])
 

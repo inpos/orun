@@ -3,13 +3,14 @@ from . import js
 
 __all__ = ['create', 'createByAlias', 'Component']
 
-def js_ajax(fn, arg_dict = {}):
+def js_ajax(fn, arg_dict = {}, f_type=js.js_procedure):
     i = id(fn)
     js.live_methods[i] = fn
-    func_args = ', '.join(['\'{k}\': {v}'.format( k = k,v = js.encode(v) ) for k,v in arg_dict.items()])
-    if func_args != '': func_args = ', ' + func_args
-    return "%s({'url': '%s', 'method': 'GET', 'params': { 'fn': %d, 'id_': %s %s}, 'success': %s })"\
-        % (js.client.Ext.Ajax.request, js.AJAX_URL, i, js.client.this.id, func_args, js.function('eval(arguments[0].responseText);'))
+    func_args = ',\n'.join(['\'{k}\': {v}'.format( k = k,v = js.encode(v) ) for k,v in arg_dict.items()])
+    if func_args != '': 
+        func_args = ',\n' + func_args
+    print(func_args)
+    return f_type(i, ajax_args=func_args)
 
 js.js_ajax = js_ajax
 
