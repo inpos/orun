@@ -18,7 +18,7 @@ def js_procedure(func_id, ajax_args=''):
     return '''
     Ext.Ajax.request(
         {
-            url: %s,
+            url: '%s',
             method: 'GET',
             params: {
                         fn: %d%s
@@ -37,7 +37,7 @@ def js_function(func_id, ajax_args=''):
     var ajax_result;
     Ext.Ajax.request(
         {
-            url: %s,
+            url: '%s',
             method: 'GET',
             params: {
                         fn: %d%s
