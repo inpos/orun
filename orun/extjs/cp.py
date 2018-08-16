@@ -28,7 +28,7 @@ class ExtApplication(cp.Application):
     def ajax_callback(self, *args, **kwargs):
         fn = kwargs.pop('fn')
         if fn:
-            fn = js.live_methods[int(fn)]
+            fn = js.live_methods[int(fn)].func
             fn(*args, **kwargs)
         return str(js.js_manager)
     
@@ -37,7 +37,7 @@ class ExtApplication(cp.Application):
     def ajax_func_callback(self, *args, **kwargs):
         fn = kwargs.pop('fn')
         if fn:
-            fn = js.live_methods[int(fn)]
+            fn = js.live_methods[int(fn)].func
             res = fn(*args, **kwargs)
             return {
                 'data': res
