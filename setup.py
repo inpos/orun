@@ -7,10 +7,14 @@ def package_files(directory):
         for filename in filenames:
             paths.append(os.path.join('..', path, filename))
     return paths
-
+# setuptools
 extra_files = package_files('examples')
-extra_files.extend(package_files('extjs/static'))
-extra_files.append('extjs/app.html')
+extra_files.extend(package_files(os.path.join('orun', 'extjs', 'static')))
+extra_files.append(os.path.join('orun', 'extjs', 'app.html'))
+# distutils
+d_files = package_files(os.path.join('orun', 'examples'))
+d_files.extend(package_files(os.path.join('orun', 'extjs', 'static')))
+d_files.append(os.path.join('orun', 'extjs', 'app.html'))
 
 setuptools.setup(
     name='Orun',
