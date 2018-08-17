@@ -10,7 +10,7 @@ def package_files(directory):
 
 extra_files = package_files('examples')
 extra_files.extend(package_files('extjs/static'))
-extra_files.append(os.path.join(os.path.abspath(__file__), 'orun', 'extjs', 'app.html'))
+extra_files.append(os.path.join(os.path.dirname(__file__), 'orun', 'extjs', 'app.html'))
 
 setuptools.setup(
     name='Orun',
