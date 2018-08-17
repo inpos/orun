@@ -4,25 +4,26 @@ from orun.extjs import *
 from orun.servers import cp
 import cherrypy
 
+THEME_MODEL = 'classic'
 THEME = 'gray'
 
 @cherrypy.expose
 class ExtJS:
     _cp_config = {
             'tools.staticdir.on': True,
-            'tools.staticdir.dir': os.path.join(os.path.dirname(__file__), 'static','ext-4.2.1'),
+            'tools.staticdir.dir': os.path.join(os.path.dirname(__file__), 'static','ext-6.2.0'),
         }
 
 class ExtApplication(cp.Application):
     def __init__(self, title=''):
         super(ExtApplication, self).__init__(title)
-        self.ext_421 = ExtJS()
+        self.ext_620 = ExtJS()
     
     @cherrypy.expose
     def index(self, *args, **kwargs):
         f = open(os.path.join(os.path.dirname(__file__), 'app.html')).read()
         self.main()
-        return f % (self.title, THEME, THEME, str(js.js_manager))
+        return f.format(title=self.title, theme=THEME, theme_model=THEME_MODEL, script=str(js.js_manager))
     
     @cherrypy.expose
     def ajax_callback(self, *args, **kwargs):
