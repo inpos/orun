@@ -13,7 +13,7 @@ extra_files.extend(package_files('extjs/static'))
 
 setuptools.setup(
     name='Orun',
-    version='0.3.0',
+    version='0.4.0',
     author='Alexandre L. Dias, Roman Borodin (inpos@yandex.ru)',
     author_email='alexandre@katrid.com',
     packages=setuptools.find_packages(),
