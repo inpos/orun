@@ -1,6 +1,5 @@
 import setuptools
 import os
-from pbr import extra_files
 
 def package_files(directory):
     paths = []
