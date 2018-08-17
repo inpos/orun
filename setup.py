@@ -10,6 +10,7 @@ def package_files(directory):
 
 extra_files = package_files('examples')
 extra_files.extend(package_files('extjs/static'))
+extra_files.append('extjs/app.html')
 
 setuptools.setup(
     name='Orun',
