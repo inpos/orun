@@ -1,5 +1,6 @@
 import setuptools
 import os
+from pbr import extra_files
 
 def package_files(directory):
     paths = []
@@ -19,6 +20,7 @@ setuptools.setup(
     author_email='alexandre@katrid.com',
     packages=setuptools.find_packages(),
     package_data={'': extra_files},
+    data_files=[('',extra_files)],
     include_package_data=True,
     url='http://pypi.python.org/pypi/Orun/',
     license='LICENSE',
