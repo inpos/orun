@@ -9,7 +9,6 @@ def js_ajax(fn, arg_dict = {}, f_type=js.js_procedure):
     func_args = ',\n'.join(['\'{k}\': {v}'.format( k = k,v = js.encode(v) ) for k,v in arg_dict.items()])
     if func_args != '': 
         func_args = ',\n' + func_args
-    print(func_args)
     return f_type(i, ajax_args=func_args)
 
 js.js_ajax = js_ajax
