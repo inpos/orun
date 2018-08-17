@@ -7,14 +7,11 @@ def package_files(directory):
         for filename in filenames:
             paths.append(os.path.join('..', path, filename))
     return paths
-# setuptools
+
 extra_files = package_files('examples')
 extra_files.extend(package_files(os.path.join('extjs', 'static')))
 extra_files.append(os.path.join('extjs', 'app.html'))
-# distutils
-d_files = package_files(os.path.join('orun', 'examples'))
-d_files.extend(package_files(os.path.join('orun', 'extjs', 'static')))
-d_files.append(os.path.join('orun', 'extjs', 'app.html'))
+
 
 setuptools.setup(
     name='Orun',
@@ -23,7 +20,6 @@ setuptools.setup(
     author_email='alexandre@katrid.com',
     packages=setuptools.find_packages(),
     package_data={'': extra_files},
-    data_files=[('',d_files)],
     include_package_data=True,
     url='http://pypi.python.org/pypi/Orun/',
     license='LICENSE',
