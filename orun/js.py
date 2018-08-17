@@ -106,7 +106,7 @@ def encode(o):
     elif isinstance(o, JsObject):
         return o._id
     else:
-        return o
+        return str(o)
 
 class JsBlock:
     def __init__(self, *args, **kwargs):
