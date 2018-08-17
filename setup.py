@@ -21,6 +21,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     package_data={'': extra_files},
     include_package_data=True,
+    zip_safe=False,
     url='http://pypi.python.org/pypi/Orun/',
     license='LICENSE',
     description='Orun (Object RUNtime) Python JavaScript RIA framework.',
