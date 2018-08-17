@@ -10,7 +10,7 @@ def package_files(directory):
 
 extra_files = package_files('examples')
 extra_files.extend(package_files('extjs/static'))
-extra_files.append('orun/extjs/app.html')
+extra_files.append('extjs/app.html')
 
 setuptools.setup(
     name='Orun',
@@ -19,7 +19,7 @@ setuptools.setup(
     author_email='alexandre@katrid.com',
     packages=setuptools.find_packages(),
     package_data={'': extra_files},
-    data_files=[('',extra_files)],
+    data_files=[('',[ os.path.join('orun', x) for x in extra_files  ])],
     include_package_data=True,
     url='http://pypi.python.org/pypi/Orun/',
     license='LICENSE',
