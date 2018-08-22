@@ -16,8 +16,7 @@ CHART_HTML_CODE = '''<script type="text/javascript" src="{base_url}/ext_620/pack
     <link rel="stylesheet" type="text/css" href="{base_url}/ext_620/packages/charts/{chart_theme_model}/resources/charts-all.css">
 '''.format(base_url=BASE_URL,
             theme_model=THEME_MODEL,
-            chart_theme_model=CHART_THEME_MODEL) if ENABLE_CHARTS else ''
-EXTJS_PACKAGES = '' + CHART_HTML_CODE
+            chart_theme_model=CHART_THEME_MODEL)
 
 @cherrypy.expose
 class ExtJS:
@@ -35,6 +34,9 @@ class ExtApplication(cp.Application):
     def index(self, *args, **kwargs):
         f = open(os.path.join(os.path.dirname(__file__), 'app.html')).read()
         self.main()
+        
+        EXTJS_PACKAGES = '' + CHART_HTML_CODE if ENABLE_CHARTS else ''
+        
         return f.format(title=self.title,
                         base_url=BASE_URL,
                         theme=THEME,
