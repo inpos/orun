@@ -10,6 +10,15 @@ CHART_THEME_MODEL = 'classic/classic' if THEME_MODEL == 'classic' else 'modern/m
 
 BASE_URL = ''
 
+ENABLE_CHARTS=False
+
+CHART_HTML_CODE = '''<script type="text/javascript" src="{base_url}/ext_620/packages/charts/{theme_model}/charts.js"></script>
+    <link rel="stylesheet" type="text/css" href="{base_url}/ext_620/packages/charts/{chart_theme_model}/resources/charts-all.css">
+'''.format(base_url=BASE_URL,
+            theme_model=THEME_MODEL,
+            chart_theme_model=CHART_THEME_MODEL) if ENABLE_CHARTS else ''
+EXTJS_PACKAGES = '' + CHART_HTML_CODE
+
 @cherrypy.expose
 class ExtJS:
     _cp_config = {
@@ -31,7 +40,7 @@ class ExtApplication(cp.Application):
                         theme=THEME,
                         theme_model=THEME_MODEL,
                         script=str(js.js_manager),
-                        chart_theme_model=CHART_THEME_MODEL)
+                        packages=EXTJS_PACKAGES)
     
     @cherrypy.expose
     def ajax_callback(self, *args, **kwargs):
