@@ -6,6 +6,7 @@ import cherrypy
 
 THEME_MODEL = 'classic'
 THEME = 'gray'
+CHART_THEME_MODEL = 'classic/classic' if THEME_MODEL == 'classic' else 'modern/modern-' + THEME
 
 BASE_URL = ''
 
