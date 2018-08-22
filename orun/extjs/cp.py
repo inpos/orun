@@ -26,7 +26,12 @@ class ExtApplication(cp.Application):
     def index(self, *args, **kwargs):
         f = open(os.path.join(os.path.dirname(__file__), 'app.html')).read()
         self.main()
-        return f.format(title=self.title, base_url=BASE_URL, theme=THEME, theme_model=THEME_MODEL, script=str(js.js_manager))
+        return f.format(title=self.title,
+                        base_url=BASE_URL,
+                        theme=THEME,
+                        theme_model=THEME_MODEL,
+                        script=str(js.js_manager),
+                        chart_theme_model=CHART_THEME_MODEL)
     
     @cherrypy.expose
     def ajax_callback(self, *args, **kwargs):
