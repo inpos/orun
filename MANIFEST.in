@@ -1,0 +1,3 @@
+include orun/extjs/app.html
+recursive-include orun/examples *
+recursive-include orun/extjs/static *
