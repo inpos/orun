@@ -7,16 +7,8 @@ import cherrypy
 THEME_MODEL = 'classic'
 THEME = 'gray'
 CHART_THEME_MODEL = 'classic/classic' if THEME_MODEL == 'classic' else 'modern/modern-' + THEME
-
 BASE_URL = ''
-
 ENABLE_CHARTS=False
-
-CHART_HTML_CODE = '''<script type="text/javascript" src="{base_url}/ext_620/packages/charts/{theme_model}/charts.js"></script>
-    <link rel="stylesheet" type="text/css" href="{base_url}/ext_620/packages/charts/{chart_theme_model}/resources/charts-all.css">
-'''.format(base_url=BASE_URL,
-            theme_model=THEME_MODEL,
-            chart_theme_model=CHART_THEME_MODEL)
 
 @cherrypy.expose
 class ExtJS:
@@ -35,6 +27,11 @@ class ExtApplication(cp.Application):
         f = open(os.path.join(os.path.dirname(__file__), 'app.html')).read()
         self.main()
         
+        CHART_HTML_CODE = '''<script type="text/javascript" src="{base_url}/ext_620/packages/charts/{theme_model}/charts.js"></script>
+    <link rel="stylesheet" type="text/css" href="{base_url}/ext_620/packages/charts/{chart_theme_model}/resources/charts-all.css">
+'''.format(base_url=BASE_URL,
+            theme_model=THEME_MODEL,
+            chart_theme_model=CHART_THEME_MODEL)
         EXTJS_PACKAGES = '' + CHART_HTML_CODE if ENABLE_CHARTS else ''
         
         return f.format(title=self.title,
